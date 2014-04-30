@@ -1,0 +1,52 @@
+<!-- NOTE: declare applicatoin as HTML5 with this declaration:  -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Wikipedia Discussion Forum</title>
+
+<!-- bootstrap css -->
+        <link href="../static/bootstrap/bootstrap.css" rel="stylesheet">
+<!-- My css sheet -->
+        <link href="../static/css/main.css" rel="stylesheet">
+<!-- jquery ui css -->
+        <link rel="stylesheet" href="../static/jquery/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" />
+    
+<!--     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" /> -->
+        <meta charset="utf-8">
+    </head>
+
+    <body>
+
+        <div class="bubbleright"></div>
+        <div class="bubbleleft"></div>
+        <div class="bubbleblue"></div>
+
+
+        <div class="container discussion"></div>
+
+
+
+<!-- jquery  -->
+        <script type="text/javascript" src="../static/jquery/jquery-2.0.3.min.js"></script>
+        <script src="../static/jquery/js/jquery-1.10.2.js"></script>
+<!-- jquery ui -->
+        <script src="../static/jquery/js/jquery-ui-1.10.4.custom.js"></script>
+<!-- bootstrap -->
+        <script type="text/javascript" src="../static/bootstrap/bootstrap.js"></script>
+<!-- Data -->
+        <script src ="../static/data/discussion.json"></script>
+<!-- my JS -->
+        <script src="../static/js/main.js"></script>
+
+        <script type="text/javascript">
+        
+            $(document).ready(function(){
+                initForum();
+            });
+
+        </script>
+
+
+    </body>
+</html>
+
