@@ -16,42 +16,49 @@ var displayAll = function(data) {
   var topics = data.topics;
   for (var i = 0; i < topics.length; i++) {
     var topicsDiv = document.createElement('div');
+    $(topicsDiv).attr('class', 'topic');
     // $(topicsDiv).attr('class', 'panel-heading');
-    $('.container').append(topicsDiv);
+    $('.discussion').append(topicsDiv);
+    console.log('should be appending topic: ' + topics[i].topictitle);
     $(topicsDiv)
-      .append("<a href='#' id='topic-" + i + "' class='topics'>" + topics[i].topictitle + "</a></br>");
+      .append("<a href='#' class='topicLink' id='topic-" + i + "'>" + topics[i].topictitle + "</a></br>");
 
     // List responses on page. Use responsesDiv to tie all responses for specific topic to event handlder in Responses() function
     var responsesDiv = document.createElement('div');
     $(responsesDiv).attr('class', 'responses-' + i);
-    $('.container').append(responsesDiv);
+    $('.discussion').append(responsesDiv);
 
     // Create div for individual responses
     for (var x = 0; x < topics[i].responses.length; x++) {
+      var responseWrapper = document.createElement('div');
+      $(responsesDiv).append(responseWrapper);
+
+      $(responseWrapper).append("<img class='blankavatar' src='../static/img/blank_avatar.jpg'>");
   
-      var responseContainer = document.createElement('div')
-      $(responseContainer).attr('class', 'panel panel-primary');
-      $(responsesDiv).append(responseContainer);
+      var bubbleWrapper = document.createElement('div');
+      $(bubbleWrapper).attr('class', 'bubblewrap');
+      $(responseWrapper).append(bubbleWrapper);
 
-      var responsesInfo = document.createElement('div');
-      $(responsesInfo).attr('class', 'panel-heading');
-      $(responseContainer).append(responsesInfo);
+      var responseContainer = document.createElement('div');
+      $(responseContainer).attr('class', 'bubbleblue');
+      $(bubbleWrapper).append(responseContainer);
 
-      var responsesContent = document.createElement('div');
-      $(responsesContent).attr('class', 'panel-body');
-      $(responseContainer).append(responsesContent);
+      var responseInfo = document.createElement('div');
+      $(responseContainer).append(responseInfo);
+      var responseContent = document.createElement('div');
+      $(responseContainer).append(responseContent);
 
-      $(responsesInfo)
+      $(responseInfo)
           .append('<p class = \'response\'>'
-            + 'id: ' + topics[i].responses[x].id + '<br>'
-            + 'parentid: ' + topics[i].responses[x].parentid + '<br>'
-            + 'depth: ' + topics[i].responses[x].depth + '<br>'
-            + 'age: ' + topics[i].responses[x].age + '<br>'
-            + 'author: ' + topics[i].responses[x].author + '<br>'
+            + 'id: ' + topics[i].responses[x].id + ' '
+            + 'parentid: ' + topics[i].responses[x].parentid + ' '
+            + 'depth: ' + topics[i].responses[x].depth + ' '
+            + 'age: ' + topics[i].responses[x].age + ' '
+            + 'author: ' + topics[i].responses[x].author
             );
-      $(responsesContent)
-          .append('<p class = \'response\'> '
-            + 'response: ' + topics[i].responses[x].posttext + '</p><br>');
+      $(responseContent)
+          .append('<p class = \'response\'>'
+            + topics[i].responses[x].posttext);
     }
   }
 };
@@ -59,10 +66,10 @@ var displayAll = function(data) {
 // Event handler to hide all responses when click on topic (preventdefault to prevent from going to href = # in Topics())
 var toggleResponses = function(data) {
   var topics = data.topics;
-  $('.topics').click(function(event){
+  $('.topicLink').click(function(event){
       event.preventDefault();
       var topicNumber = $(this).attr('id').substring('topic-'.length);
-      $('.responses-' + topicNumber).toggle();
+      $('.responses-' + topicNumber).slideToggle('slow');
   });
 };
 
