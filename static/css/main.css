@@ -6,6 +6,19 @@
 /*  float:left;*/
 }
 
+.blankavatar {
+  height:70px;
+  width:70px;
+  float:left;
+}
+
+.line-separator{
+/*height:1px;*/
+background:#717171;
+border-bottom:1px solid #313030;
+margin-bottom:10px;
+}
+
 .bubblewrap 
 {
   margin-left:75px;
@@ -146,8 +159,3 @@ left: -18px;
 top: 9px;
 }
 
-.blankavatar {
-  height:70px;
-  width:70px;
-  float:left;
-}

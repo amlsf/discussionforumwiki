@@ -19,9 +19,10 @@ var displayAll = function(data) {
     $(topicsDiv).attr('class', 'topic');
     // $(topicsDiv).attr('class', 'panel-heading');
     $('.discussion').append(topicsDiv);
-    console.log('should be appending topic: ' + topics[i].topictitle);
+    // console.log('should be appending topic: ' + topics[i].topictitle);
     $(topicsDiv)
-      .append("<a href='#' class='topicLink' id='topic-" + i + "'>" + topics[i].topictitle + "</a></br>");
+      .append("<h4><b><a href='#' class='topicLink' id='topic-" + i + "'>" + topics[i].topictitle
+        + "</a></b></h3><div class='line-separator'></div>");
 
     // List responses on page. Use responsesDiv to tie all responses for specific topic to event handlder in Responses() function
     var responsesDiv = document.createElement('div');
@@ -30,6 +31,54 @@ var displayAll = function(data) {
 
     // Create div for individual responses
     for (var x = 0; x < topics[i].responses.length; x++) {
+      addFirstResponse(topics[i].responses[x], responsesDiv);
+
+
+      // var responseWrapper = document.createElement('div');
+      // $(responsesDiv).append(responseWrapper);
+
+      // $(responseWrapper).append("<img class='blankavatar' src='../static/img/blank_avatar.jpg'>");
+  
+      // var bubbleWrapper = document.createElement('div');
+      // $(bubbleWrapper).attr('class', 'bubblewrap');
+      // $(responseWrapper).append(bubbleWrapper);
+
+      // var responseContainer = document.createElement('div');
+      // $(responseContainer).attr('class', 'bubbleblue');
+      // $(bubbleWrapper).append(responseContainer);
+
+      // var responseInfo = document.createElement('div');
+      // $(responseContainer).append(responseInfo);
+      // var responseContent = document.createElement('div');
+      // $(responseContainer).append(responseContent);
+
+      // $(responseInfo)
+      //     .append('<p class = \'response\'>'
+      //       + '<b><a href=\'#\'>' + topics[i].responses[x].author + '</a></b> '
+      //       + 'id: ' + topics[i].responses[x].id + ' '
+      //       + 'parentid: ' + topics[i].responses[x].parentid + ' '
+      //       + 'depth: ' + topics[i].responses[x].depth + ' '
+      //       + 'age: ' + topics[i].responses[x].age
+      //       );
+      // $(responseContent)
+      //     .append('<p class = \'response\'>'
+      //       + topics[i].responses[x].posttext);
+    }
+  }
+};
+
+// Event handler to hide all responses when click on topic (preventdefault to prevent from going to href = # in Topics())
+var toggleResponses = function(data) {
+  var topics = data.topics;
+  $('.topicLink').click(function(event){
+      event.preventDefault();
+      var topicNumber = $(this).attr('id').substring('topic-'.length);
+      $('.responses-' + topicNumber).slideToggle('slow');
+  });
+};
+
+var addFirstResponse = function(response, responsesDiv) {
+
       var responseWrapper = document.createElement('div');
       $(responsesDiv).append(responseWrapper);
 
@@ -50,30 +99,16 @@ var displayAll = function(data) {
 
       $(responseInfo)
           .append('<p class = \'response\'>'
-            + 'id: ' + topics[i].responses[x].id + ' '
-            + 'parentid: ' + topics[i].responses[x].parentid + ' '
-            + 'depth: ' + topics[i].responses[x].depth + ' '
-            + 'age: ' + topics[i].responses[x].age + ' '
-            + 'author: ' + topics[i].responses[x].author
+            + '<b><a href=\'#\'>' + response.author + '</a></b> '
+            + 'id: ' + response.id + ' '
+            + 'parentid: ' + response.parentid + ' '
+            + 'depth: ' + response.depth + ' '
+            + 'age: ' + response.age
             );
       $(responseContent)
           .append('<p class = \'response\'>'
-            + topics[i].responses[x].posttext);
-    }
-  }
+            + response.posttext);
 };
-
-// Event handler to hide all responses when click on topic (preventdefault to prevent from going to href = # in Topics())
-var toggleResponses = function(data) {
-  var topics = data.topics;
-  $('.topicLink').click(function(event){
-      event.preventDefault();
-      var topicNumber = $(this).attr('id').substring('topic-'.length);
-      $('.responses-' + topicNumber).slideToggle('slow');
-  });
-};
-
-
 
 
 
