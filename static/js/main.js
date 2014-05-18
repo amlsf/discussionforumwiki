@@ -17,26 +17,29 @@ var initForum = function () {
 var displayAll = function(data) {
   // List topics on page
   var topics = data.topics;
-
+  // create Topicsdivs to contain each topic
   for (var i = 0; i < topics.length; i++) {
     var topicsDiv = document.createElement('div');
     $(topicsDiv).attr('class', 'topic');
-    // $(topicsDiv).attr('class', 'panel-heading');
+    // $(topicsDiv).attr('class', 'panel-heading')
+    // append topicsDiv to primary div in html file
     $('.discussion').append(topicsDiv);
     // console.log('should be appending topic: ' + topics[i].topictitle);
+    // add topic information along with number of replies into Topics div
     $(topicsDiv)
       .append("<h4><b><a href='#' class='topicLink' id='topic-" + i + "'>" + topics[i].topictitle
         + " (" + topics[i].responses.length + (topics[i].responses.length > 1 ? " replies)": " reply)")
         + "</a></b></h3>"
         + "<div class='line-separator'></div>");
 
-    // List responses on page. Use responsesDiv to tie all responses for specific topic to event handler in Responses() function
+    // create responsesDiv to hold all responses to a given topic & append to primary div in html file, under topicsDiv
     var responsesDiv = document.createElement('div');
+    // create unique class with each response and id
     $(responsesDiv).attr('class', 'responses-' + i);
     $('.discussion').append(responsesDiv);
 
     var responseChildDict = {};
-    // Create div for individual responses
+    // Create div for individual responses and append to responsesDiv, alternating colors for each depth level
     for (var x = 0; x < topics[i].responses.length; x++) {
       if (topics[i].responses[x].depth % 2 === 0) {
         addDepthResponse(topics[i].responses[x], responsesDiv, 'bubbleblueleft', responseChildDict);
@@ -53,6 +56,7 @@ var addDepthResponse = function(response, responsesDiv, bubbleclass, responseChi
       var parentid = response.parentid;
       var depth = response.depth;
 
+      // create wrapper to hold each response to append to responsesDiv (which holds all responses to a given topic)
       var responseWrapper = document.createElement('div');
       $(responseWrapper).attr('class','responsediv').attr('id', 'response-' + id);
       $(responsesDiv).append(responseWrapper);
@@ -61,24 +65,31 @@ var addDepthResponse = function(response, responsesDiv, bubbleclass, responseChi
       var indent = response.depth*30;
       $(responseWrapper).css('margin-left',"+=" + indent);
 
-      // Created response Wrapper to be able to position blankavator image and bubbleWrapper
+      // Add blankavator image to resopnseWrapper and append bubbleWrapper div to hold the rest
       $(responseWrapper).append("<img class='blankavatar' src='../static/img/blank_avatar.jpg'>");
   
+      // Bubblewrapper Div to append into resopnseWrapper, to be able to position relative to avatar
       var bubbleWrapper = document.createElement('div');
       $(bubbleWrapper).attr('class', 'bubblewrap');
       $(responseWrapper).append(bubbleWrapper);
 
+      // create another div within the bubble to hold all the content - created a separate div from bubbleWrapper so could 
+        // trade-off color of bubbleclass
       var responseContainer = document.createElement('div');
       $(responseContainer).attr('class', bubbleclass);
       $(bubbleWrapper).append(responseContainer);
 
+      // responseInfo holds the response information like author, time, etc
       var responseInfo = document.createElement('div');
       $(responseContainer).append(responseInfo);
+      // responseContent holds the responses content
       var responseContent = document.createElement('div');
       $(responseContainer).append(responseContent);
+      // responseControls holds the response buttons
       var responseControls = document.createElement('div');
       $(responseContainer).append(responseControls);
 
+      // TODO ???? This is creating the div that contains all the same depth responses to a certain comment
       if (responseChildDict[parentid]) {
         $(responseChildDict[parentid]).append(responseWrapper);
       } else {
@@ -89,10 +100,7 @@ var addDepthResponse = function(response, responsesDiv, bubbleclass, responseChi
         responseChildDict[parentid] = responseChild;
       }
 
-      // indent based on depth
-      // var indent = response.depth*30;
-      // $(responseWrapper).css('margin-left',"+=" + indent);
-
+      // Add response information - author, age, etc
       $(responseInfo)
           .append('<p class = \'response\'>'
             + '<b><a href=\'#\'>' + response.author + '</a></b> '
@@ -101,9 +109,11 @@ var addDepthResponse = function(response, responsesDiv, bubbleclass, responseChi
             + 'parentid: ' + response.parentid + ' '
             + 'depth: ' + response.depth
             );
+      // Add content of comments
       $(responseContent)
           .append('<p class = \'response\'>'
             + response.posttext);
+      // Add reply buttons
       $(responseControls)
         .append("<form class = 'reply'>"
           + "<input type='text' class='form-control replybox' id='replyform" + id + " name='content'>"
@@ -114,10 +124,11 @@ var addDepthResponse = function(response, responsesDiv, bubbleclass, responseChi
 };
 
 
-// Event handler to hide all responses when click on topic (preventdefault to prevent from going to href = # in Topics())
+// Event handler to hide all responses when click on topic 
 var toggleResponses = function(data) {
   var topics = data.topics;
   $('.topicLink').click(function(event){
+      // preventdefault to prevent from going to href = # in displayAll()
       event.preventDefault();
       var topicNumber = $(this).attr('id').substring('topic-'.length);
       $('.responses-' + topicNumber).slideToggle('slow');
@@ -141,7 +152,9 @@ var secondsToTime = function(totalSeconds) {
 };
 
 
-// Takes in replies
+// Reads replies
+// TODO need to add responses into temp dictionary to temporarily hold & display with discussion.json until user refreshes
+  // need to use responseChildDict and the responseChild div that holds all same-depth responses
 var replyButton = function(){
   $('.replybutton').click(function(event) {
     var panelid = $(this).attr("data-panelid");
